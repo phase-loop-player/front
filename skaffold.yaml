@@ -1,0 +1,21 @@
+apiVersion: skaffold/v1
+kind: Config
+build:
+  artifacts:
+    - image: yoyota/cra-template-yoyota-helm
+      sync:
+        manual:
+          - src: "src/**/*.js"
+            dest: .
+      docker:
+        target: install
+deploy:
+  helm:
+    releases:
+      - name: cra-template-yoyota-helm
+        namespace: default
+        chartPath: helm
+        setValueTemplates:
+          develop.enabled: true
+          develop.repository: "{{.IMAGE_NAME}}"
+          develop.tag: "{{.DIGEST_HEX}}"
