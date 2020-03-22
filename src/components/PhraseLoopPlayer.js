@@ -3,7 +3,7 @@ import ReactPlayer from "react-player"
 import { Button } from "react-bootstrap"
 
 const url = "https://www.youtube.com/watch?v=FZnZU9JInL0"
-function PhaseLoopPlayer() {
+function PhraseLoopPlayer() {
   const [player, setPlayer] = useState()
   const playerRef = useRef()
   function onReady() {
@@ -36,4 +36,4 @@ function PhaseLoopPlayer() {
     </>
   )
 }
-export default PhaseLoopPlayer
+export default PhraseLoopPlayer
