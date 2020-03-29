@@ -1,4 +1,4 @@
-import backend from "./backend"
+const RANGE = 7
 
 // eslint-disable-next-line import/prefer-default-export
-export { backend }
+export { RANGE }
