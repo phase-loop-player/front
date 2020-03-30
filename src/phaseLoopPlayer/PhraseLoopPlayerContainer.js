@@ -26,10 +26,6 @@ export default function PhraseLoopPlayerContainer() {
     fetchRegions()
   }, [maxDuration, minDuration, setRegions, url])
 
-  if (!url || !regions) {
-    return <div />
-  }
-
   return (
     <>
       <h1>Phase loop player</h1>

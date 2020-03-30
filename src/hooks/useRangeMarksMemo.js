@@ -3,6 +3,9 @@ import { RANGE } from "../config"
 
 export default function useRangeMArksMemo({ regions, loopRegion }) {
   return useMemo(() => {
+    if (!loopRegion || !regions || regions.length === 0) {
+      return []
+    }
     return regions.reduce((prev, { start, end }) => {
       if (start < loopRegion.start - RANGE || end > loopRegion.end + RANGE) {
         return prev
@@ -11,5 +14,5 @@ export default function useRangeMArksMemo({ regions, loopRegion }) {
       prev[end] = Number(end.toFixed(1))
       return prev
     }, {})
-  }, [loopRegion.end, loopRegion.start, regions])
+  }, [loopRegion, regions])
 }

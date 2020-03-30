@@ -1,20 +1,25 @@
 import React, { useRef, useState, useCallback } from "react"
+import "rc-slider/assets/index.css"
 import ReactPlayer from "react-player"
 import { HotKeys } from "react-hotkeys"
-import "rc-slider/assets/index.css"
+import { Button } from "react-bootstrap"
+
 import Slider, { Range } from "rc-slider"
 
 import { RANGE } from "../config"
 import useLoop from "../hooks/useLoop"
 import useRangeMarksMemo from "../hooks/useRangeMarksMemo"
 import useReactPlayerCallback from "../hooks/useReactPlayerCallback"
+import useUpdateLoopRegion from "../hooks/useUpdateLoopRegion"
 
 function PhraseLoopPlayer({ url, regions = [] }) {
   const playerRef = useRef()
   const [player, setPlayer] = useState()
   const [duration, setDuration] = useState(0)
   const loopIndexRef = useRef(0)
-  const [loopRegion, setLoopRegion] = useState(regions[0])
+  const [loopRegion, setLoopRegion] = useState(
+    regions[0] || { start: 0, end: 5 }
+  )
   const [videoState, setVideoState] = useState({ playedSeconds: 0 })
 
   useLoop({ player, loopRegion })
@@ -24,6 +29,12 @@ function PhraseLoopPlayer({ url, regions = [] }) {
     setDuration,
     playerRef,
     setVideoState
+  })
+  const updateLoopRegion = useUpdateLoopRegion({
+    player,
+    regions,
+    loopIndexRef,
+    setLoopRegion
   })
 
   const handleSeekChange = useCallback(
@@ -65,6 +76,20 @@ function PhraseLoopPlayer({ url, regions = [] }) {
         step={0.01}
         marks={marks}
       />
+      <div className="mt-5">
+        <Button
+          size="lg"
+          onClick={() => updateLoopRegion(loopIndexRef.current - 1)}
+        >
+          Previous
+        </Button>
+        <Button
+          size="lg"
+          onClick={() => updateLoopRegion(loopIndexRef.current + 1)}
+        >
+          Next
+        </Button>
+      </div>
     </HotKeys>
   )
 }
