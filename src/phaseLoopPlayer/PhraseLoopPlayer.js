@@ -1,7 +1,7 @@
 import React, { useRef, useState, useCallback } from "react"
 import "rc-slider/assets/index.css"
 import ReactPlayer from "react-player"
-import { HotKeys } from "react-hotkeys"
+import { GlobalHotKeys } from "react-hotkeys"
 import { Button } from "react-bootstrap"
 
 import Slider, { Range } from "rc-slider"
@@ -49,13 +49,32 @@ function PhraseLoopPlayer({ url, regions = [] }) {
     [player, regions]
   )
 
+  const handlers = {
+    next: () => updateLoopRegion(loopIndexRef.current + 1),
+    previous: () => updateLoopRegion(loopIndexRef.current - 1)
+  }
+
+  const keyMap = {
+    next: ["right"],
+    previous: ["left"]
+  }
+
   return (
-    <HotKeys handlers={{}}>
+    <GlobalHotKeys keyMap={keyMap} handlers={handlers} allowChanges>
       <h5>player</h5>
       <ReactPlayer
         playing
         ref={playerRef}
         url={url}
+        config={{
+          youtube: {
+            playerVars: {
+              cc_lang_pref: "en",
+              cc_load_policy: 1,
+              show_info: 1
+            }
+          }
+        }}
         onReady={onReady}
         onProgress={onProgress}
         width="100%"
@@ -75,6 +94,9 @@ function PhraseLoopPlayer({ url, regions = [] }) {
         max={Math.min(duration, loopRegion.end + RANGE)}
         step={0.01}
         marks={marks}
+        onChange={([start, end]) => {
+          setLoopRegion({ start, end })
+        }}
       />
       <div className="mt-5">
         <Button
@@ -90,7 +112,7 @@ function PhraseLoopPlayer({ url, regions = [] }) {
           Next
         </Button>
       </div>
-    </HotKeys>
+    </GlobalHotKeys>
   )
 }
 export default PhraseLoopPlayer
