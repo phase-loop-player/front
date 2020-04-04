@@ -10,11 +10,13 @@ module.exports = {
     jest: true,
     browser: true
   },
-  plugins: ["jest", "promise", "prettier", "react", "react-hooks"],
+  plugins: ["jest", "promise", "prettier", "react", "react-hooks", "markdown"],
   rules: {
     "no-alert": "error",
     "no-console": "error",
-    "no-param-reassign": ["error", { props: false }],
+    "no-param-reassign": ["error", {
+      props: false
+    }],
     "no-unused-vars": [
       "error",
       {
@@ -34,12 +36,13 @@ module.exports = {
     "import/no-extraneous-dependencies": "off"
   },
   overrides: [{
-     "files": ["**/*.md"],
-     "rules": {
-       "react/jsx-no-undef": "off",
-       "import/no-unresolved": "off",
-       "no-unused-expressions": "off",
-       "react/react-in-jsx-scope": "off"
-     }
-   }]
+    "files": ["*.md"],
+    "rules": {
+      "react/jsx-no-undef": "off",
+      "import/no-unresolved": "off",
+      "no-unused-expressions": "off",
+      "react/react-in-jsx-scope": "off",
+      "prettier/prettier": "off"
+    }
+  }]
 }
