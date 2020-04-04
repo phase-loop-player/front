@@ -31,7 +31,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint src",
-    "styleguide": "styleguidist server"
+    "styleguide": "styleguidist server",
+    "build-docs": "styleguidist build"
   },
   "eslintConfig": {
     "extends": "react-app"
