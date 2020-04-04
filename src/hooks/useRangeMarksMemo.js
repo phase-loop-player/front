@@ -1,7 +1,7 @@
 import { useMemo } from "react"
 import { RANGE } from "../config"
 
-export default function useRangeMArksMemo({ regions, loopRegion }) {
+export default function useRangeMarksMemo({ regions = [], loopRegion }) {
   return useMemo(() => {
     if (!loopRegion || !regions || regions.length === 0) {
       return []
