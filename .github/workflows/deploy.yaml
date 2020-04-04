@@ -23,4 +23,4 @@ jobs:
             --set image.tag=$IMAGE_TAG \
             --set imagePullSecrets[0].name=regcred-github-com \
             --history-max 2 \
-            create-react-app-yoyota ./helm
+            phrase-loop-player-front ./helm
