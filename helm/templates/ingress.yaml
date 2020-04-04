@@ -1,5 +1,5 @@
 {{- if .Values.ingress.enabled -}}
-{{- $fullName := include "cra-template-yoyota-helm.fullname" . -}}
+{{- $fullName := include "phrase-loop-player-front.fullname" . -}}
 {{- $svcPort := .Values.service.port -}}
 {{- if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
 apiVersion: networking.k8s.io/v1beta1
@@ -10,7 +10,7 @@ kind: Ingress
 metadata:
   name: {{ $fullName }}
   labels:
-    {{- include "cra-template-yoyota-helm.labels" . | nindent 4 }}
+    {{- include "phrase-loop-player-front.labels" . | nindent 4 }}
   {{- with .Values.ingress.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}

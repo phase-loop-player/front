@@ -1,34 +1,39 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "cra-template-yoyota-helm.fullname" . }}
+  name: {{ include "phrase-loop-player-front.fullname" . }}
   labels:
-    {{- include "cra-template-yoyota-helm.labels" . | nindent 4 }}
+    {{- include "phrase-loop-player-front.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "cra-template-yoyota-helm.selectorLabels" . | nindent 6 }}
+      {{- include "phrase-loop-player-front.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        {{- include "cra-template-yoyota-helm.selectorLabels" . | nindent 8 }}
+        {{- include "phrase-loop-player-front.selectorLabels" . | nindent 8 }}
     spec:
       volumes:
       - name: nginx-conf
         configMap:
-          name: {{ include "cra-template-yoyota-helm.fullname" . }}
+          name: {{ include "phrase-loop-player-front.fullname" . }}
     {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
     {{- end }}
-      serviceAccountName: {{ include "cra-template-yoyota-helm.serviceAccountName" . }}
+      serviceAccountName: {{ include "phrase-loop-player-front.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
         {{- if .Values.develop.enabled}}
         - name: {{ .Chart.Name }}-dev
           image: "{{ .Values.develop.repository }}:{{ .Values.develop.tag }}"
+          command: 
+            - /bin/sh 
+            - -c
+            - CI=TRUE npm
+            - start
         {{- end }}
         - name: {{ .Chart.Name }}
           securityContext:
@@ -52,14 +57,14 @@ spec:
               containerPort: 8080
               protocol: TCP
           {{- if not .Values.develop.enabled }}
-          livenessProbe:
-            httpGet:
-              path: /
-              port: http
-          readinessProbe:
-            httpGet:
-              path: /
-              port: http
+          # livenessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          # readinessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
           {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}

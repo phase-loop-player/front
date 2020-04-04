@@ -2,7 +2,7 @@ apiVersion: skaffold/v1
 kind: Config
 build:
   artifacts:
-    - image: yoyota/cra-template-yoyota-helm
+    - image: yoyota/phrase-loop-player-front
       sync:
         manual:
           - src: "src/**/*.js"
@@ -12,8 +12,8 @@ build:
 deploy:
   helm:
     releases:
-      - name: cra-template-yoyota-helm
-        namespace: default
+      - name: phrase-loop-player-front
+        namespace: yoyota
         chartPath: helm
         setValueTemplates:
           develop.enabled: true

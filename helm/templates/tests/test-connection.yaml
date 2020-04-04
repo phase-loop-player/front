@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: "{{ include "cra-template-yoyota-helm.fullname" . }}-test-connection"
+  name: "{{ include "phrase-loop-player-front.fullname" . }}-test-connection"
   labels:
-{{ include "cra-template-yoyota-helm.labels" . | nindent 4 }}
+{{ include "phrase-loop-player-front.labels" . | nindent 4 }}
   annotations:
     "helm.sh/hook": test-success
 spec:
@@ -11,5 +11,5 @@ spec:
     - name: wget
       image: busybox
       command: ['wget']
-      args:  ['{{ include "cra-template-yoyota-helm.fullname" . }}:{{ .Values.service.port }}']
+      args:  ['{{ include "phrase-loop-player-front.fullname" . }}:{{ .Values.service.port }}']
   restartPolicy: Never
