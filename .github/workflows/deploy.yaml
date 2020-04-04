@@ -1,12 +1,9 @@
 name: deploy
 
 on:
-  project:
-    types:
-      - "deleted"
-  # push:
-  #   branches:
-  #     - master
+  push:
+    branches:
+      - master
 
 jobs:
   deploy:
