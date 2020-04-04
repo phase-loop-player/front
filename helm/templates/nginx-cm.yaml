@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "cra-template-yoyota-helm.fullname" . }}
+  name: {{ include "phrase-loop-player-front.fullname" . }}
 data:
   nginx.conf: |
     worker_processes  1;

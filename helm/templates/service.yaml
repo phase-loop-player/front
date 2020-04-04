@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "cra-template-yoyota-helm.fullname" . }}
+  name: {{ include "phrase-loop-player-front.fullname" . }}
   labels:
-    {{- include "cra-template-yoyota-helm.labels" . | nindent 4 }}
+    {{- include "phrase-loop-player-front.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
   ports:
@@ -12,4 +12,4 @@ spec:
       protocol: TCP
       name: http
   selector:
-    {{- include "cra-template-yoyota-helm.selectorLabels" . | nindent 4 }}
+    {{- include "phrase-loop-player-front.selectorLabels" . | nindent 4 }}
