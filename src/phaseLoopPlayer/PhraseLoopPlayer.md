@@ -1,7 +1,9 @@
 example:
 
 ```js
-import testdata from "./testdata.json"
+import { regions } from "./testdata.json"
 
-;<PhraseLoopPlayer regions={testdata} />
+;
+
+<PhraseLoopPlayer regions={regions} />
 ```
