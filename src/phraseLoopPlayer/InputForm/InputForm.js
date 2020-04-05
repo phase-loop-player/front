@@ -13,7 +13,7 @@ export default function({ setUrl, setRegions }) {
         setRegions(null)
         localStorage.setItem("loopIndex", 0)
         const { data } = await backend.get(
-          `/regions?url=${url}&minDuration=${minDuration}&maxDuration=${maxDuration}`
+          `/regions?url=${url}&min_duration=${minDuration}&max_duration=${maxDuration}`
         )
         setUrl(url)
         setRegions(data.regions)
