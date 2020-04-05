@@ -4,6 +4,6 @@ import App from "./App"
 
 test("render app", () => {
   const { getByText } = render(<App />)
-  const homeElement = getByText(/phase loop player/i)
+  const homeElement = getByText(/phrase loop player/i)
   expect(homeElement).toBeInTheDocument()
 })
