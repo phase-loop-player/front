@@ -10,12 +10,13 @@ export default function({ setUrl, setRegions }) {
       initialValues={{ url: "", minDuration: 3, maxDuration: 7 }}
       onSubmit={async values => {
         const { url, minDuration, maxDuration } = values
+        setRegions(null)
+        localStorage.setItem("loopIndex", 0)
         const { data } = await backend.get(
           `/regions?url=${url}&minDuration=${minDuration}&maxDuration=${maxDuration}`
         )
         setUrl(url)
         setRegions(data.regions)
-        localStorage.setItem("regions", JSON.stringify(data.regions))
       }}
     >
       {({ values, handleChange, handleSubmit }) => (

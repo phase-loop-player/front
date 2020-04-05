@@ -1,57 +1,48 @@
-import React, { useRef, useState, useCallback } from "react"
+import React, { useRef, useState, useEffect, useCallback } from "react"
 import "rc-slider/assets/index.css"
 import ReactPlayer from "react-player"
 import { GlobalHotKeys } from "react-hotkeys"
 import { Button } from "react-bootstrap"
+import Slider from "rc-slider"
 
-import Slider, { Range } from "rc-slider"
-
-import { RANGE } from "../config"
 import useLoop from "../hooks/useLoop"
-import useRangeMarksMemo from "../hooks/useRangeMarksMemo"
 import useReactPlayerCallback from "../hooks/useReactPlayerCallback"
-import useUpdateLoopRegion from "../hooks/useUpdateLoopRegion"
+import useLoopIndex from "../hooks/useLoopIndex"
+import RangeInput from "./RangeInput"
 
-function PhraseLoopPlayer({ url, regions = [] }) {
+function PhraseLoopPlayer({ url, regions }) {
   const playerRef = useRef()
   const [player, setPlayer] = useState()
   const [duration, setDuration] = useState(0)
-  const loopIndexRef = useRef(0)
-  const [loopRegion, setLoopRegion] = useState(
-    regions[0] || { start: 0, end: 5 }
-  )
   const [videoState, setVideoState] = useState({ playedSeconds: 0 })
-
-  useLoop({ player, loopRegion })
-  const marks = useRangeMarksMemo({ regions, loopRegion })
   const { onReady, onProgress } = useReactPlayerCallback({
     setPlayer,
     setDuration,
     playerRef,
     setVideoState
   })
-  const updateLoopRegion = useUpdateLoopRegion({
-    player,
-    regions,
-    loopIndexRef,
-    setLoopRegion
-  })
+  const { loopIndex, setLoopIndex, addLoopIndex } = useLoopIndex(regions)
+  const [loopRegion, setLoopRegion] = useState(regions[loopIndex])
+  useLoop({ player, loopRegion })
+  useEffect(() => {
+    setLoopRegion(regions[loopIndex])
+  }, [loopIndex, regions])
 
   const handleSeekChange = useCallback(
     time => {
-      player.seekTo(time)
       const index = regions.findIndex(
         ({ start, end }) => start < time && time < end
       )
-      setLoopRegion(regions[index])
-      loopIndexRef.current = index
+      if (index !== -1) {
+        setLoopIndex(index)
+      }
     },
-    [player, regions]
+    [regions, setLoopIndex]
   )
 
   const handlers = {
-    next: () => updateLoopRegion(loopIndexRef.current + 1),
-    previous: () => updateLoopRegion(loopIndexRef.current - 1)
+    next: () => addLoopIndex(1),
+    previous: () => addLoopIndex(-1)
   }
 
   const keyMap = {
@@ -66,15 +57,6 @@ function PhraseLoopPlayer({ url, regions = [] }) {
         playing
         ref={playerRef}
         url={url}
-        config={{
-          youtube: {
-            playerVars: {
-              cc_lang_pref: "en",
-              cc_load_policy: 1,
-              show_info: 1
-            }
-          }
-        }}
         onReady={onReady}
         onProgress={onProgress}
         width="100%"
@@ -88,27 +70,18 @@ function PhraseLoopPlayer({ url, regions = [] }) {
         step={0.01}
         onChange={handleSeekChange}
       />
-      <Range
-        value={[loopRegion.start, loopRegion.end]}
-        min={Math.max(0, loopRegion.start - RANGE)}
-        max={Math.min(duration, loopRegion.end + RANGE)}
-        step={0.01}
-        marks={marks}
-        onChange={([start, end]) => {
-          setLoopRegion({ start, end })
-        }}
+      <RangeInput
+        regions={regions}
+        duration={duration}
+        loopRegion={loopRegion}
+        setLoopRegion={setLoopRegion}
+        playedSeconds={videoState.playedSeconds}
       />
       <div className="mt-5">
-        <Button
-          size="lg"
-          onClick={() => updateLoopRegion(loopIndexRef.current - 1)}
-        >
+        <Button size="lg" onClick={() => addLoopIndex(-1)}>
           Previous
         </Button>
-        <Button
-          size="lg"
-          onClick={() => updateLoopRegion(loopIndexRef.current + 1)}
-        >
+        <Button size="lg" onClick={() => addLoopIndex(1)}>
           Next
         </Button>
       </div>
