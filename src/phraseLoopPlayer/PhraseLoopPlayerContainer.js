@@ -10,7 +10,7 @@ export default function PhraseLoopPlayerContainer() {
   if (!regions || regions.length === 0) {
     return (
       <>
-        <h1>Phase loop player</h1>
+        <h1>Phrase loop player</h1>
         <InputForm url={url} setUrl={setUrl} setRegions={setRegions} />
       </>
     )
@@ -18,7 +18,7 @@ export default function PhraseLoopPlayerContainer() {
 
   return (
     <>
-      <h1>Phase loop player</h1>
+      <h1>Phrase loop player</h1>
       <InputForm url={url} setUrl={setUrl} setRegions={setRegions} />
       <PhraseLoopPlayer url={url} regions={regions} />
     </>

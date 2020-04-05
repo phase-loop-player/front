@@ -2,7 +2,7 @@ import React from "react"
 import { Container } from "react-bootstrap"
 import { ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
-import { PhraseLoopPlayerContainer } from "./phaseLoopPlayer"
+import { PhraseLoopPlayerContainer } from "./phraseLoopPlayer"
 
 function App() {
   return (
