@@ -2,21 +2,32 @@ import React from "react"
 import { InputGroup, Form, Button, Col } from "react-bootstrap"
 import { Formik } from "formik"
 import { Persist } from "@engrjabi/formik-persist"
-import { backend } from "../../api"
+import to from "await-to-js"
+import { toast } from "react-toastify"
+import { getSubtitles } from "youtube-captions-scraper-yoyota"
+import queryString from "query-string"
 
 export default function({ setUrl, setRegions }) {
   return (
     <Formik
-      initialValues={{ url: "", minDuration: 3, maxDuration: 7 }}
+      initialValues={{ url: "", minDuration: 0.2, maxDuration: 5 }}
       onSubmit={async values => {
-        const { url, minDuration, maxDuration } = values
+        const { url } = values
+        const { v } = queryString.parse(url.match(/\?(.*)/g).pop())
+        const [err, captions] = await to(
+          getSubtitles({
+            videoID: v,
+            lang: "en",
+            url: "https://cors-anywhere.herokuapp.com/https://www.youtube.com"
+          })
+        )
+        if (err) {
+          toast.error(err.string())
+        }
         setRegions(null)
         localStorage.setItem("loopIndex", 0)
-        const { data } = await backend.get(
-          `/regions?url=${url}&min_duration=${minDuration}&max_duration=${maxDuration}`
-        )
         setUrl(url)
-        setRegions(data.regions)
+        setRegions(captions)
       }}
     >
       {({ values, handleChange, handleSubmit }) => (
@@ -32,7 +43,7 @@ export default function({ setUrl, setRegions }) {
               />
             </Form.Group>
             <Form.Group as={Col} sm="5" lg="3" xl="2" className="d-flex">
-              <InputGroup.Text>min duration</InputGroup.Text>
+              <InputGroup.Text>min time</InputGroup.Text>
               <Form.Control
                 name="minDuration"
                 type="number"
@@ -42,7 +53,7 @@ export default function({ setUrl, setRegions }) {
               />
             </Form.Group>
             <Form.Group as={Col} sm="5" lg="3" xl="2" className="d-flex">
-              <InputGroup.Text>max duration</InputGroup.Text>
+              <InputGroup.Text>max time</InputGroup.Text>
               <Form.Control
                 name="maxDuration"
                 type="number"
@@ -51,7 +62,7 @@ export default function({ setUrl, setRegions }) {
               />
             </Form.Group>
             <Col sm="2" xl="1">
-              <Button block type="submit" className="mb-3">
+              <Button block type="submit" className="mb-3 mx-0">
                 submit
               </Button>
             </Col>
