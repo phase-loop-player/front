@@ -11,6 +11,7 @@ import useLoopIndex from "../hooks/useLoopIndex"
 import RangeInput from "./RangeInput"
 
 function PhraseLoopPlayer({ url, regions }) {
+  // regions = regions.filter((_, i) => !(i % 2))
   const playerRef = useRef()
   const [player, setPlayer] = useState()
   const [duration, setDuration] = useState(0)
@@ -88,4 +89,5 @@ function PhraseLoopPlayer({ url, regions }) {
     </GlobalHotKeys>
   )
 }
+
 export default PhraseLoopPlayer
