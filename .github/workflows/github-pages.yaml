@@ -1,9 +1,9 @@
 name: github pages
 
 on:
-  push:
-    tags:
-      - v*
+  push
+  # tags:
+  #   - v*
 
 jobs:
   build-deploy:
@@ -14,12 +14,12 @@ jobs:
         with:
           node-version: 12.x
       - run: npm ci
-      - run: npm run build-docs
-      # - run: echo "example.com" > ./build/CNAME
+      - run: npm run build
+      - run: echo "loop.yoyota.dev" > ./build/CNAME
       - name: deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./build-docs
+          publish_dir: ./build
           publish_branch: gh-pages
           force_orphan: true
