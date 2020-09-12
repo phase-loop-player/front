@@ -27,7 +27,8 @@ export default function PhraseLoopPlayerContainer({ url }) {
       }
       setRegions(null)
       localStorage.setItem("loopIndex", 0)
-      setRegions(captions)
+      const intersection = fixOverlap(captions)
+      setRegions(intersection)
     }
     fetchCaptions()
   }, [setRegions, url])
@@ -36,4 +37,28 @@ export default function PhraseLoopPlayerContainer({ url }) {
     return <div />
   }
   return <PhraseLoopPlayer url={url} regions={regions} />
+}
+
+function fixOverlap(regions) {
+  if (!regions) {
+    return []
+  }
+  if (regions.length < 3) {
+    return regions
+  }
+  if (regions[0].end === regions[2].start) {
+    return regions.reduce((prev, curr, index) => {
+      if (index % 2 === 1) {
+        const prevRegion = regions[index - 1]
+        const region = {
+          ...prevRegion,
+          text: `${prevRegion.text} ${curr.text}`
+        }
+        prev.pop()
+        return [...prev, region]
+      }
+      return [...prev, curr]
+    }, [])
+  }
+  return regions
 }
