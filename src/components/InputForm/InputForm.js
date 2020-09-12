@@ -1,21 +1,26 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { InputGroup, Form, Button, Col } from "react-bootstrap"
 import { Formik } from "formik"
 import { Persist } from "@engrjabi/formik-persist"
 
-export default function({ setUrl }) {
+export default function({ setInputValues }) {
+  useEffect(() => {
+    const { values } = JSON.parse(localStorage.getItem("settings")) || {}
+    if (values) {
+      setInputValues(values)
+    }
+  }, [setInputValues])
   return (
     <Formik
-      initialValues={{ url: "", minDuration: 0.2, maxDuration: 5 }}
+      initialValues={{ url: "", averageDuration: 5 }}
       onSubmit={async values => {
-        const { url } = values
-        setUrl(url)
+        setInputValues(values)
       }}
     >
       {({ values, handleChange, handleSubmit }) => (
         <Form onSubmit={handleSubmit}>
           <Form.Row className="d-md-flex">
-            <Form.Group as={Col} sm="12" lg="5" xl="7" className="d-flex">
+            <Form.Group as={Col} sm="12" xl="9" className="d-flex">
               <InputGroup.Text>url</InputGroup.Text>
               <Form.Control
                 name="url"
@@ -24,26 +29,16 @@ export default function({ setUrl }) {
                 onChange={handleChange}
               />
             </Form.Group>
-            <Form.Group as={Col} sm="5" lg="3" xl="2" className="d-flex">
-              <InputGroup.Text>min time</InputGroup.Text>
+            <Form.Group as={Col} sm="12" xl="2" className="d-flex">
+              <InputGroup.Text>average duration</InputGroup.Text>
               <Form.Control
-                name="minDuration"
+                name="averageDuration"
                 type="number"
-                value={values.minDuration}
-                onChange={handleChange}
-                xs="2"
-              />
-            </Form.Group>
-            <Form.Group as={Col} sm="5" lg="3" xl="2" className="d-flex">
-              <InputGroup.Text>max time</InputGroup.Text>
-              <Form.Control
-                name="maxDuration"
-                type="number"
-                value={values.maxDuration}
+                value={values.averageDuration}
                 onChange={handleChange}
               />
             </Form.Group>
-            <Col sm="2" xl="1">
+            <Col sm="12" xl="1">
               <Button block type="submit" className="mb-3 mx-0">
                 submit
               </Button>
