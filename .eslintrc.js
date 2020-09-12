@@ -17,6 +17,7 @@ module.exports = {
     "no-param-reassign": ["error", {
       props: false
     }],
+    "no-use-before-define": "off",
     "no-unused-vars": [
       "error",
       {

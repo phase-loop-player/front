@@ -12,7 +12,6 @@ export default function useReactPlayerCallback({
   }, [playerRef, setDuration, setPlayer])
   const onProgress = useCallback(
     state => {
-      // console.log(state)
       setVideoState(state)
     },
     [setVideoState]
