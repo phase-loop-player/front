@@ -6,7 +6,7 @@ import useLocalStorageState from "use-local-storage-state"
 import { getSubtitles } from "youtube-captions-scraper-yoyota"
 import PhraseLoopPlayer from "../PhraseLoopPlayer/PhraseLoopPlayer"
 
-export default function PhraseLoopPlayerContainer({ url }) {
+export default function PhraseLoopPlayerContainer({ url, averageDuration }) {
   const [regions, setRegions] = useLocalStorageState("regions")
 
   useEffect(() => {
@@ -28,10 +28,14 @@ export default function PhraseLoopPlayerContainer({ url }) {
       setRegions(null)
       localStorage.setItem("loopIndex", 0)
       const intersection = fixOverlap(captions)
-      setRegions(intersection)
+      const chunked = chunkRegions({
+        averageDuration,
+        regions: intersection
+      })
+      setRegions(chunked)
     }
     fetchCaptions()
-  }, [setRegions, url])
+  }, [averageDuration, setRegions, url])
 
   if (!regions || regions.length === 0) {
     return <div />
@@ -61,4 +65,26 @@ function fixOverlap(regions) {
     }, [])
   }
   return regions
+}
+
+function chunkRegions({ regions, averageDuration }) {
+  if (!regions || regions.length === 0) {
+    return []
+  }
+  return regions.reduce((prev, curr) => {
+    const region = curr
+    const chunkSize = Math.round(region.dur / averageDuration)
+    const dur = region.dur / chunkSize
+
+    if (chunkSize < 2) {
+      return [...prev, region]
+    }
+
+    const chunks = [...Array(chunkSize).keys()].map(index => {
+      const start = region.start + index * dur
+      return { dur, start, end: start + dur, text: region.text }
+    })
+
+    return [...prev, ...chunks]
+  }, [])
 }
