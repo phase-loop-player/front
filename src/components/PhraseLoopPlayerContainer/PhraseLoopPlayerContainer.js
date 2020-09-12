@@ -19,7 +19,7 @@ export default function PhraseLoopPlayerContainer({ url }) {
         getSubtitles({
           videoID: v,
           lang: "en",
-          url: "https://cors-anywhere.herokuapp.com/https://www.youtube.com"
+          url: "https://cors.yoyota.dev/https://www.youtube.com"
         })
       )
       if (err) {
