@@ -5,10 +5,10 @@ import { GlobalHotKeys } from "react-hotkeys"
 import { Button } from "react-bootstrap"
 import Slider from "rc-slider"
 
-import useLoop from "../hooks/useLoop"
-import useReactPlayerCallback from "../hooks/useReactPlayerCallback"
-import useLoopIndex from "../hooks/useLoopIndex"
-import RangeInput from "./RangeInput"
+import useLoop from "../../hooks/useLoop"
+import useReactPlayerCallback from "../../hooks/useReactPlayerCallback"
+import useLoopIndex from "../../hooks/useLoopIndex"
+import RangeInput from "../RangeInput"
 
 function PhraseLoopPlayer({ url, regions }) {
   // regions = regions.filter((_, i) => !(i % 2))
@@ -49,6 +49,10 @@ function PhraseLoopPlayer({ url, regions }) {
   const keyMap = {
     next: ["right"],
     previous: ["left"]
+  }
+
+  if (!regions || regions.length === 0) {
+    return <div />
   }
 
   return (

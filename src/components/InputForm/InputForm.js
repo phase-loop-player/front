@@ -2,32 +2,14 @@ import React from "react"
 import { InputGroup, Form, Button, Col } from "react-bootstrap"
 import { Formik } from "formik"
 import { Persist } from "@engrjabi/formik-persist"
-import to from "await-to-js"
-import { toast } from "react-toastify"
-import { getSubtitles } from "youtube-captions-scraper-yoyota"
-import queryString from "query-string"
 
-export default function({ setUrl, setRegions }) {
+export default function({ setUrl }) {
   return (
     <Formik
       initialValues={{ url: "", minDuration: 0.2, maxDuration: 5 }}
       onSubmit={async values => {
         const { url } = values
-        const { v } = queryString.parse(url.match(/\?(.*)/g).pop())
-        const [err, captions] = await to(
-          getSubtitles({
-            videoID: v,
-            lang: "en",
-            url: "https://cors-anywhere.herokuapp.com/https://www.youtube.com"
-          })
-        )
-        if (err) {
-          toast.error(err.string())
-        }
-        setRegions(null)
-        localStorage.setItem("loopIndex", 0)
         setUrl(url)
-        setRegions(captions)
       }}
     >
       {({ values, handleChange, handleSubmit }) => (
