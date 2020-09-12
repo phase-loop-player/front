@@ -20,7 +20,7 @@ export default function({ setInputValues }) {
       {({ values, handleChange, handleSubmit }) => (
         <Form onSubmit={handleSubmit}>
           <Form.Row className="d-md-flex">
-            <Form.Group as={Col} sm="12" xl="9" className="d-flex">
+            <Form.Group as={Col} sm="12" xl="8" className="d-flex">
               <InputGroup.Text>url</InputGroup.Text>
               <Form.Control
                 name="url"
@@ -29,7 +29,7 @@ export default function({ setInputValues }) {
                 onChange={handleChange}
               />
             </Form.Group>
-            <Form.Group as={Col} sm="12" xl="2" className="d-flex">
+            <Form.Group as={Col} sm="12" xl="3" className="d-flex">
               <InputGroup.Text>average duration</InputGroup.Text>
               <Form.Control
                 name="averageDuration"
