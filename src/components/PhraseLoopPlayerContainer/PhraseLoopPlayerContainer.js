@@ -10,10 +10,10 @@ export default function PhraseLoopPlayerContainer({ url, averageDuration }) {
   const [regions, setRegions] = useLocalStorageState("regions")
 
   useEffect(() => {
+    if (!url || regions) {
+      return
+    }
     async function fetchCaptions() {
-      if (!url) {
-        return
-      }
       const { v } = queryString.parse(url.match(/\?(.*)/g).pop())
       const [err, captions] = await to(
         getSubtitles({
@@ -35,7 +35,7 @@ export default function PhraseLoopPlayerContainer({ url, averageDuration }) {
       setRegions(chunked)
     }
     fetchCaptions()
-  }, [averageDuration, setRegions, url])
+  }, [averageDuration, regions, setRegions, url])
 
   if (!regions || regions.length === 0) {
     return <div />
