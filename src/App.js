@@ -7,10 +7,7 @@ import InputForm from "./components/InputForm"
 import PhraseLoopPlayerContainer from "./components/PhraseLoopPlayerContainer"
 
 function App() {
-  const [inputValues, setInputValues] = useState({
-    url: "",
-    averageDuration: 5
-  })
+  const [inputValues, setInputValues] = useState(getFormCachedValues())
   return (
     <>
       <ToastContainer />
@@ -21,6 +18,11 @@ function App() {
       </Container>
     </>
   )
+}
+
+function getFormCachedValues() {
+  const { values } = JSON.parse(localStorage.getItem("settings")) || {}
+  return values
 }
 
 export default App

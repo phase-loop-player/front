@@ -1,6 +1,6 @@
 {
   "name": "phrase-loop-player",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "private": true,
   "dependencies": {
     "@engrjabi/formik-persist": "^1.1.1",

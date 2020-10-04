@@ -31,6 +31,7 @@ function PhraseLoopPlayer({ url, regions }) {
 
   const handleSeekChange = useCallback(
     time => {
+      setLoopRegion(null)
       const index = regions.findIndex(
         ({ start, end }) => start < time && time < end
       )
@@ -51,7 +52,7 @@ function PhraseLoopPlayer({ url, regions }) {
     previous: ["left"]
   }
 
-  if (!regions || regions.length === 0) {
+  if (!regions || regions.length === 0 || !loopRegion) {
     return <div />
   }
 

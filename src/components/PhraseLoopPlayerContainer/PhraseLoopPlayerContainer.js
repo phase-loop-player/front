@@ -10,37 +10,37 @@ export default function PhraseLoopPlayerContainer({ url, averageDuration }) {
   const [regions, setRegions] = useLocalStorageState("regions")
 
   useEffect(() => {
-    async function fetchCaptions() {
-      if (!url) {
-        return
-      }
-      const { v } = queryString.parse(url.match(/\?(.*)/g).pop())
-      const [err, captions] = await to(
-        getSubtitles({
-          videoID: v,
-          lang: "en",
-          url: "https://cors.yoyota.dev/https://www.youtube.com"
-        })
-      )
-      if (err) {
-        toast.error(err.string())
-      }
-      setRegions(null)
-      localStorage.setItem("loopIndex", 0)
-      const intersection = fixOverlap(captions)
-      const chunked = chunkRegions({
-        averageDuration,
-        regions: intersection
-      })
-      setRegions(chunked)
+    if (!url) {
+      return
     }
-    fetchCaptions()
+    fetchCaptions({ url, setRegions, averageDuration })
   }, [averageDuration, setRegions, url])
 
   if (!regions || regions.length === 0) {
     return <div />
   }
   return <PhraseLoopPlayer url={url} regions={regions} />
+}
+
+async function fetchCaptions({ url, setRegions, averageDuration }) {
+  const { v } = queryString.parse(url.match(/\?(.*)/g).pop())
+  const [err, captions] = await to(
+    getSubtitles({
+      videoID: v,
+      lang: "en",
+      url: "https://cors.yoyota.dev/https://www.youtube.com"
+    })
+  )
+  if (err) {
+    toast.error(JSON.stringify(err, Object.getOwnPropertyNames(err)))
+  }
+  const intersection = fixOverlap(captions)
+  const chunked = chunkRegions({
+    averageDuration,
+    regions: intersection
+  })
+  setRegions(null)
+  setRegions(chunked)
 }
 
 function fixOverlap(regions) {

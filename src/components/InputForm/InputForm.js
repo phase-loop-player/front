@@ -1,19 +1,14 @@
-import React, { useEffect } from "react"
+import React from "react"
 import { InputGroup, Form, Button, Col } from "react-bootstrap"
 import { Formik } from "formik"
 import { Persist } from "@engrjabi/formik-persist"
 
 export default function({ setInputValues }) {
-  useEffect(() => {
-    const { values } = JSON.parse(localStorage.getItem("settings")) || {}
-    if (values) {
-      setInputValues(values)
-    }
-  }, [setInputValues])
   return (
     <Formik
       initialValues={{ url: "", averageDuration: 5 }}
       onSubmit={async values => {
+        localStorage.setItem("loopIndex", 0)
         setInputValues(values)
       }}
     >
